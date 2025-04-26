@@ -24,9 +24,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 	simcli "github.com/cosmos/cosmos-sdk/x/simulation/client/cli"
 
-	"github.com/milkyway-labs/milkyway/v11/app/sim"
+	"github.com/milkyway-labs/milkyway/v12/app/sim"
 
-	milkyway "github.com/milkyway-labs/milkyway/v11/app"
+	milkyway "github.com/milkyway-labs/milkyway/v12/app"
 )
 
 // AppChainID hardcoded chainID for simulation

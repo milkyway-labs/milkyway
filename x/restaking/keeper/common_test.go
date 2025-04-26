@@ -17,14 +17,14 @@ import (
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 	"github.com/stretchr/testify/suite"
 
-	assetskeeper "github.com/milkyway-labs/milkyway/v11/x/assets/keeper"
-	assetstypes "github.com/milkyway-labs/milkyway/v11/x/assets/types"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v11/x/operators/keeper"
-	poolskeeper "github.com/milkyway-labs/milkyway/v11/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/testutils"
-	rewardstypes "github.com/milkyway-labs/milkyway/v11/x/rewards/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v11/x/services/keeper"
+	assetskeeper "github.com/milkyway-labs/milkyway/v12/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/v12/x/assets/types"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v12/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v12/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/testutils"
+	rewardstypes "github.com/milkyway-labs/milkyway/v12/x/rewards/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v12/x/services/keeper"
 )
 
 func TestKeeperTestSuite(t *testing.T) {

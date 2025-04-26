@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v12/x/assets/types"
 )
 
 var _ types.MsgServer = msgServer{}

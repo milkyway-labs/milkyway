@@ -9,8 +9,8 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/milkyway-labs/milkyway/v11/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/services/types"
+	"github.com/milkyway-labs/milkyway/v12/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 // Simulation operation weights constants

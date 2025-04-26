@@ -22,8 +22,8 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/v11/x/investors/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/investors/testutils"
+	"github.com/milkyway-labs/milkyway/v12/x/investors/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/investors/testutils"
 )
 
 func TestKeeperTestSuite(t *testing.T) {

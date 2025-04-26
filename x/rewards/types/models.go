@@ -11,8 +11,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/address"
 	"github.com/cosmos/gogoproto/proto"
 
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	restakingtypes "github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	restakingtypes "github.com/milkyway-labs/milkyway/v12/x/restaking/types"
 )
 
 // MaxRewardsPlanDescriptionLength is the maximum length of a rewards plan description.

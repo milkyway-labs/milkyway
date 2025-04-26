@@ -16,8 +16,8 @@ import (
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	channeltypes "github.com/cosmos/ibc-go/v8/modules/core/04-channel/types"
 
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	"github.com/milkyway-labs/milkyway/v11/x/ibc-hooks/types"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	"github.com/milkyway-labs/milkyway/v12/x/ibc-hooks/types"
 )
 
 type (

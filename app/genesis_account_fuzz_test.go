@@ -6,7 +6,7 @@ import (
 
 	fuzz "github.com/google/gofuzz"
 
-	milkyway "github.com/milkyway-labs/milkyway/v11/app"
+	milkyway "github.com/milkyway-labs/milkyway/v12/app"
 )
 
 func TestFuzzGenesisAccountValidate(t *testing.T) {

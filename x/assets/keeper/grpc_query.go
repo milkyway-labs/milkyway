@@ -11,7 +11,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	"github.com/milkyway-labs/milkyway/v11/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v12/x/assets/types"
 )
 
 var _ types.QueryServer = queryServer{}

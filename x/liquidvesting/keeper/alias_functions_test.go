@@ -3,11 +3,11 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v11/x/pools/types"
-	restakingkeeper "github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
-	restakingtypes "github.com/milkyway-labs/milkyway/v11/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
+	restakingkeeper "github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
+	restakingtypes "github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_GetAllUserRestakedLockedRepresentations() {

@@ -8,13 +8,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/v11/testutils/simtesting"
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v11/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	"github.com/milkyway-labs/milkyway/v12/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 func RandomOperatorJoinedServices(

@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	v2 "github.com/milkyway-labs/milkyway/v11/x/restaking/migrations/v2"
+	v2 "github.com/milkyway-labs/milkyway/v12/x/restaking/migrations/v2"
 )
 
 // Migrator is a struct for handling in-place store migrations.

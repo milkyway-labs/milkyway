@@ -8,8 +8,8 @@ import (
 	warptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
 	feemarkettypes "github.com/skip-mev/feemarket/x/feemarket/types"
 
-	"github.com/milkyway-labs/milkyway/v11/app/upgrades"
-	investorstypes "github.com/milkyway-labs/milkyway/v11/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v12/app/upgrades"
+	investorstypes "github.com/milkyway-labs/milkyway/v12/x/investors/types"
 )
 
 const UpgradeName = "v11"

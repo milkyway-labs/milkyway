@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v12/x/assets/types"
 )
 
 // ExportGenesis returns the GenesisState associated with the given context

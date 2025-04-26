@@ -6,10 +6,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/v11/testutils/simtesting"
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	"github.com/milkyway-labs/milkyway/v11/x/services/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/services/types"
+	"github.com/milkyway-labs/milkyway/v12/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	"github.com/milkyway-labs/milkyway/v12/x/services/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 // RandomService returns a random service

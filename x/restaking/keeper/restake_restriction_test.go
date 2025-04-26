@@ -4,11 +4,11 @@ import (
 	sdkmath "cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v11/app/testutil"
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	"github.com/milkyway-labs/milkyway/v12/app/testutil"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_ValidateRestakeRestakingCap() {

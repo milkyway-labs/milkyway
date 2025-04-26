@@ -3,9 +3,9 @@ package simulation
 import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v11/testutils/simtesting"
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	"github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v12/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/types"
 )
 
 // RandomizedGenState generates a random GenesisState for the operators module

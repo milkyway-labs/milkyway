@@ -9,7 +9,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/types"
 )
 
 var _ types.MsgServer = msgServer{}

@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v11/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 var _ servicestypes.ServicesHooks = ServicesHooks{}
