@@ -37,6 +37,7 @@ type HandlerOptions struct {
 	Codec                 codec.BinaryCodec
 	IBCKeeper             *ibckeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
+	TxFeeChecker          ante.TxFeeChecker
 	TXCounterStoreService corestoretypes.KVStoreService
 	WasmConfig            *wasmtypes.WasmConfig
 }
@@ -73,6 +74,7 @@ func NewAnteHandler(opts HandlerOptions) (sdk.AnteHandler, error) {
 		ante.NewTxTimeoutHeightDecorator(),
 		ante.NewValidateMemoDecorator(opts.AccountKeeper),
 		ante.NewConsumeGasForTxSizeDecorator(opts.AccountKeeper),
+		ante.NewDeductFeeDecorator(opts.AccountKeeper, opts.BankKeeper, opts.FeegrantKeeper, opts.TxFeeChecker),
 		ante.NewSetPubKeyDecorator(opts.AccountKeeper), // SetPubKeyDecorator must be called before all signature verification decorators
 		ante.NewValidateSigCountDecorator(opts.AccountKeeper),
 		ante.NewSigGasConsumeDecorator(opts.AccountKeeper, sigGasConsumer),
