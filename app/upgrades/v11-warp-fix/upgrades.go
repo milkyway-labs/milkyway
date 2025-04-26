@@ -11,8 +11,6 @@ import (
 	"github.com/milkyway-labs/milkyway/v11/app/keepers"
 )
 
-const foundationAddress = "milk108zdtldyt6r98rlg6la6nvwczzxnh2mjajlj4g"
-
 func CreateUpgradeHandler(
 	mm *module.Manager,
 	configuration module.Configurator,

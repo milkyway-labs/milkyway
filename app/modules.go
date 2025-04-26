@@ -71,6 +71,7 @@ import (
 	"github.com/milkyway-labs/milkyway/v11/x/bank"
 	ibchooks "github.com/milkyway-labs/milkyway/v11/x/ibc-hooks"
 	ibchookstypes "github.com/milkyway-labs/milkyway/v11/x/ibc-hooks/types"
+	"github.com/milkyway-labs/milkyway/v11/x/investors"
 	investorstypes "github.com/milkyway-labs/milkyway/v11/x/investors/types"
 	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting"
 	liquidvestingtypes "github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
@@ -175,6 +176,7 @@ func appModules(
 		assets.NewAppModule(appCodec, app.AssetsKeeper),
 		rewards.NewAppModule(appCodec, app.RewardsKeeper, app.AccountKeeper, app.BankKeeper, app.PoolsKeeper, app.OperatorsKeeper, app.ServicesKeeper),
 		liquidvesting.NewAppModule(appCodec, app.LiquidVestingKeeper),
+		investors.NewAppModule(appCodec, app.InvestorsKeeper),
 	}
 }
 
@@ -277,6 +279,7 @@ func orderBeginBlockers() []string {
 		operatorstypes.ModuleName,
 		poolstypes.ModuleName,
 		restakingtypes.ModuleName,
+		investorstypes.ModuleName,
 	}
 }
 
