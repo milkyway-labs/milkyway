@@ -35,5 +35,8 @@ func (k *Keeper) InitGenesis(ctx sdk.Context, state *types.GenesisState) error {
 		}
 	}
 
+	// Create the module account if it doesn't exist
+	k.accountKeeper.GetModuleAccount(ctx, types.ModuleName)
+
 	return nil
 }
