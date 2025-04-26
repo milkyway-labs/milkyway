@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -->
 
+## Version 12.0.0
+### Features
+- ([\#284](https://github.com/milkyway-labs/milkyway/pull/284)) Added missing `x/investors` CLI commands
+
+### Bug Fixes
+- ([\#283](https://github.com/milkyway-labs/milkyway/pull/283)) Added missing `x/investors` module registration
+- ([4247bc5](https://github.com/milkyway-labs/milkyway/commit/4247bc5)) Fixed `AnteHandler` not deducting fees properly
+
 ## Version 11.0.0
 ### Features
 #### Pools
