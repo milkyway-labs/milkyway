@@ -6,11 +6,11 @@ import (
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
-	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v11/x/pools/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 func MustGetLockedDenom(denom string) string {

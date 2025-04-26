@@ -4,11 +4,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v11/app/keepers"
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	poolstypes "github.com/milkyway-labs/milkyway/v11/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v11/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	"github.com/milkyway-labs/milkyway/v12/app/keepers"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 func BeginFork(ctx sdk.Context, mm *module.Manager, cfg module.Configurator, keepers *keepers.AppKeepers) {

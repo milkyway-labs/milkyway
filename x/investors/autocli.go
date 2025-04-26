@@ -3,7 +3,7 @@ package investors
 import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 
-	investorsv1 "github.com/milkyway-labs/milkyway/v11/api/milkyway/investors/v1"
+	investorsv1 "github.com/milkyway-labs/milkyway/v12/api/milkyway/investors/v1"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

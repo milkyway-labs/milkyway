@@ -4,8 +4,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	appparams "github.com/milkyway-labs/milkyway/v11/app/params"
-	"github.com/milkyway-labs/milkyway/v11/x/tokenfactory/types"
+	appparams "github.com/milkyway-labs/milkyway/v12/app/params"
+	"github.com/milkyway-labs/milkyway/v12/x/tokenfactory/types"
 )
 
 func (s *KeeperTestSuite) TestGenesis() {

@@ -6,9 +6,9 @@ import (
 	corestoretypes "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/runtime"
 
-	"github.com/milkyway-labs/milkyway/v11/testutils/storetesting"
-	"github.com/milkyway-labs/milkyway/v11/x/operators/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v12/testutils/storetesting"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/types"
 )
 
 type KeeperTestData struct {

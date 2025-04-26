@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/runtime"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v12/x/tokenfactory/types"
 )
 
 type (

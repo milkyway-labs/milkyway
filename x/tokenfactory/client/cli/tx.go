@@ -12,7 +12,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/spf13/cobra"
 
-	"github.com/milkyway-labs/milkyway/v11/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v12/x/tokenfactory/types"
 )
 
 // GetTxCmd returns the transaction commands for this module

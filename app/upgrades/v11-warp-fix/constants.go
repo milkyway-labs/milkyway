@@ -5,7 +5,7 @@ import (
 
 	storetypes "cosmossdk.io/store/types"
 
-	"github.com/milkyway-labs/milkyway/v11/app/upgrades"
+	"github.com/milkyway-labs/milkyway/v12/app/upgrades"
 )
 
 const UpgradeName = "v11-warp-fix"

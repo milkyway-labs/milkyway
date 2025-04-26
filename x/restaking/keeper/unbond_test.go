@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"time"
 
-	"github.com/milkyway-labs/milkyway/v11/utils"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v12/utils"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_MaxUnbondingEntries() {

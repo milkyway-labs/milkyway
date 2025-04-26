@@ -7,9 +7,9 @@ import (
 	"cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v11/x/pools/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 const (

@@ -5,8 +5,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v12/x/restaking/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_EndBlocker() {

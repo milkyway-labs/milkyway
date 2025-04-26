@@ -17,16 +17,16 @@ import (
 	ibcexported "github.com/cosmos/ibc-go/v8/modules/core/exported"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/testutils"
-	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v11/x/operators/keeper"
-	operatorstypes "github.com/milkyway-labs/milkyway/v11/x/operators/types"
-	poolskeeper "github.com/milkyway-labs/milkyway/v11/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v11/x/pools/types"
-	restakingkeeper "github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v11/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/v11/x/services/types"
+	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/testutils"
+	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v12/x/operators/keeper"
+	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v12/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
+	restakingkeeper "github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v12/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
 )
 
 const (

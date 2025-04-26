@@ -8,7 +8,7 @@ import (
 	warptypes "github.com/bcp-innovations/hyperlane-cosmos/x/warp/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v11/app/keepers"
+	"github.com/milkyway-labs/milkyway/v12/app/keepers"
 )
 
 func CreateUpgradeHandler(

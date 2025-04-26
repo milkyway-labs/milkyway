@@ -5,12 +5,12 @@ import (
 
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/tokenfactory/types"
+	"github.com/milkyway-labs/milkyway/v12/x/tokenfactory/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	appparams "github.com/milkyway-labs/milkyway/v11/app/params"
+	appparams "github.com/milkyway-labs/milkyway/v12/app/params"
 )
 
 // TestMintDenomMsg tests TypeMsgMint message is emitted on a successful mint

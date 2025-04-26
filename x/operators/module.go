@@ -21,10 +21,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v11/x/operators/client/cli"
-	"github.com/milkyway-labs/milkyway/v11/x/operators/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/operators/simulation"
-	"github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/client/cli"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/simulation"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/types"
 )
 
 const (

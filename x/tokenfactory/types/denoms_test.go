@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	appparams "github.com/milkyway-labs/milkyway/v11/app/params"
-	"github.com/milkyway-labs/milkyway/v11/x/tokenfactory/types"
+	appparams "github.com/milkyway-labs/milkyway/v12/app/params"
+	"github.com/milkyway-labs/milkyway/v12/x/tokenfactory/types"
 )
 
 func TestDeconstructDenom(t *testing.T) {

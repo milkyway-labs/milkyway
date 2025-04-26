@@ -10,8 +10,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	connecttypes "github.com/skip-mev/connect/v2/pkg/types"
 
-	assetstypes "github.com/milkyway-labs/milkyway/v11/x/assets/types"
-	"github.com/milkyway-labs/milkyway/v11/x/rewards/types"
+	assetstypes "github.com/milkyway-labs/milkyway/v12/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v12/x/rewards/types"
 )
 
 // These code snippets are copied from x/rewards/keeper/oracle.go

@@ -9,8 +9,8 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
 
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
 )
 
 // Simulation operation weights constants

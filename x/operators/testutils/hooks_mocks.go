@@ -3,7 +3,7 @@ package testutils
 import (
 	"context"
 
-	"github.com/milkyway-labs/milkyway/v11/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v12/x/operators/types"
 )
 
 var _ types.OperatorsHooks = &MockHooks{}

@@ -6,8 +6,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
 
-	"github.com/milkyway-labs/milkyway/v11/x/investors/keeper"
-	"github.com/milkyway-labs/milkyway/v11/x/investors/types"
+	"github.com/milkyway-labs/milkyway/v12/x/investors/keeper"
+	"github.com/milkyway-labs/milkyway/v12/x/investors/types"
 )
 
 // BeginBlocker is called every block and is responsible for removing the

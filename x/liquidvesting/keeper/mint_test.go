@@ -3,7 +3,7 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v11/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
 )
 
 func (suite *KeeperTestSuite) TestKeeper_MintLockedRepresentation() {
