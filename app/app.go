@@ -71,6 +71,7 @@ import (
 	v11 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v11"
 	v11warpfix "github.com/milkyway-labs/milkyway/v12/app/upgrades/v11-warp-fix"
 	v12 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v12"
+	v12commissionfix "github.com/milkyway-labs/milkyway/v12/app/upgrades/v12-commission-fix"
 	v6 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v6"
 	v9 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v9"
 	_ "github.com/milkyway-labs/milkyway/v12/client/docs/statik"
@@ -93,6 +94,7 @@ var (
 		v11.Upgrade,
 		v11warpfix.Upgrade,
 		v12.Upgrade,
+		v12commissionfix.Upgrade,
 	}
 )
 
