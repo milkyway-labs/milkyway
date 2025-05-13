@@ -137,6 +137,55 @@
           "Params": "MarketMapParams"
         }
       }
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/assets/v1/query.swagger.json"
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/investors/v1/query.swagger.json"
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/liquidvesting/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "LiquidVestingParams"
+        }
+      }
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/operators/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "OperatorsParams"
+        }
+      }
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/pools/v1/query.swagger.json"
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/restaking/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "RestakingParams"
+        }
+      }
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/rewards/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "RewardsParams"
+        }
+      }
+    },
+    {
+      "url": "./tmp-swagger-gen/milkyway/services/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "ServicesParams"
+        }
+      }
     }
   ]
 }
