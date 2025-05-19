@@ -188,7 +188,7 @@ bufVer=1.47.2
 bufImageName=bufbuild/buf:$(bufVer)
 bufImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(bufImageName)
 
-protoVer=0.15.2
+protoVer=0.14.0
 protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
 protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(protoImageName)
 
