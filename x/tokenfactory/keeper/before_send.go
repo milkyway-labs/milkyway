@@ -167,10 +167,8 @@ func (k Keeper) callBeforeSendListener(context context.Context, from, to sdk.Acc
 			if err != nil {
 				return err
 			}
-			em := sdk.NewEventManager()
 
-			childCtx := ctx.WithGasMeter(storetypes.NewGasMeter(types.BeforeSendHookGasLimit))
-			_, err = k.contractKeeper.Sudo(childCtx.WithEventManager(em), cwAddr, msgBz)
+			err = k.gasCheckedSudo(ctx, cwAddr, msgBz)
 			if err != nil {
 				if strings.Contains(err.Error(), "no such contract") {
 					return nil
@@ -178,10 +176,27 @@ func (k Keeper) callBeforeSendListener(context context.Context, from, to sdk.Acc
 
 				return errorsmod.Wrapf(err, "failed to call before send hook for denom %s", coin.Denom)
 			}
-
-			// consume gas used for calling contract to the parent ctx
-			ctx.GasMeter().ConsumeGas(childCtx.GasMeter().GasConsumed(), "track before send gas")
 		}
 	}
+	return nil
+}
+
+// gasCheckedSudo calls the Sudo method with gas consumption and events emission
+// from the contract handled properly.
+func (k Keeper) gasCheckedSudo(sdkCtx sdk.Context, contractAddr sdk.AccAddress, msgBz []byte) error {
+	gasLimit := min(sdkCtx.GasMeter().GasRemaining(), types.BeforeSendHookGasLimit)
+	childCtx := sdkCtx.
+		WithGasMeter(storetypes.NewGasMeter(gasLimit)).
+		WithEventManager(sdkCtx.EventManager())
+	defer func() {
+		// Consume gas used by the contract call in the parent context.
+		// Using defer ensures gas consumption happens even if the call errors or panics.
+		sdkCtx.GasMeter().ConsumeGas(childCtx.GasMeter().GasConsumed(), "track before send gas")
+	}()
+	_, err := k.contractKeeper.Sudo(childCtx, contractAddr, msgBz)
+	if err != nil {
+		return err
+	}
+	sdkCtx.EventManager().EmitEvents(childCtx.EventManager().Events())
 	return nil
 }
