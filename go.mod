@@ -20,7 +20,7 @@ require (
 	github.com/CosmWasm/wasmd v0.53.0
 	github.com/CosmWasm/wasmvm/v2 v2.1.3
 	github.com/bcp-innovations/hyperlane-cosmos v1.0.0-rc0
-	github.com/cometbft/cometbft v0.38.17
+	github.com/cometbft/cometbft v0.38.19
 	github.com/cosmos/cosmos-db v1.1.1
 	github.com/cosmos/cosmos-proto v1.0.0-beta.5
 	github.com/cosmos/cosmos-sdk v0.50.13
@@ -46,16 +46,16 @@ require (
 	github.com/skip-mev/connect/v2 v2.0.1
 	github.com/skip-mev/feemarket v1.1.1
 	github.com/spf13/cast v1.7.1
-	github.com/spf13/cobra v1.8.1
+	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/mock v0.4.0
-	golang.org/x/crypto v0.32.0 // indirect
-	golang.org/x/sync v0.10.0
+	golang.org/x/crypto v0.33.0 // indirect
+	golang.org/x/sync v0.11.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20241209162323-e6fa225c2576
 	google.golang.org/grpc v1.70.0
-	google.golang.org/protobuf v1.36.4
+	google.golang.org/protobuf v1.36.5
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
@@ -147,7 +147,7 @@ require (
 	github.com/daixiang0/gci v0.13.5 // indirect
 	github.com/danieljoos/wincred v1.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
-	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0 // indirect
+	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.0 // indirect
 	github.com/denis-tingaikin/go-header v0.5.0 // indirect
 	github.com/desertbit/timer v0.0.0-20180107155436-c41aec40b27f // indirect
 	github.com/dgraph-io/badger/v4 v4.2.0 // indirect
@@ -369,11 +369,11 @@ require (
 	golang.org/x/exp v0.0.0-20240909161429-701f63a606c0 // indirect
 	golang.org/x/exp/typeparams v0.0.0-20240314144324-c7f7c6466f7f // indirect
 	golang.org/x/mod v0.21.0 // indirect
-	golang.org/x/net v0.34.0 // indirect
+	golang.org/x/net v0.35.0 // indirect
 	golang.org/x/oauth2 v0.25.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
-	golang.org/x/term v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/term v0.29.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 	golang.org/x/tools v0.25.0 // indirect
 	google.golang.org/api v0.215.0 // indirect
