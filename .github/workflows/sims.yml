@@ -32,7 +32,7 @@ jobs:
             go.sum
 
       - name: Save cache 💾
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/go/bin
           key: ${{ runner.os }}-go-runsim-binary
@@ -64,7 +64,7 @@ jobs:
             go.sum
 
       - name: Save cache 💾
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/go/bin
           key: ${{ runner.os }}-go-runsim-binary
@@ -96,7 +96,7 @@ jobs:
             go.sum
 
       - name: Save cache 💾
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/go/bin
           key: ${{ runner.os }}-go-runsim-binary
