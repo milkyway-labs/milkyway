@@ -7,7 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v13/x/liquidvesting/types"
 )
 
 type Keeper struct {

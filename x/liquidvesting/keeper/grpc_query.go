@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v13/x/liquidvesting/types"
 )
 
 type Querier struct {

@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/types"
 )
 
 // CompleteMatureUnbondingDelegations runs the endblocker logic for delegations

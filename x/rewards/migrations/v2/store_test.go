@@ -7,10 +7,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
-	"github.com/milkyway-labs/milkyway/v12/utils"
-	v2 "github.com/milkyway-labs/milkyway/v12/x/rewards/migrations/v2"
-	"github.com/milkyway-labs/milkyway/v12/x/rewards/testutils"
-	"github.com/milkyway-labs/milkyway/v12/x/rewards/types"
+	"github.com/milkyway-labs/milkyway/v13/utils"
+	v2 "github.com/milkyway-labs/milkyway/v13/x/rewards/migrations/v2"
+	"github.com/milkyway-labs/milkyway/v13/x/rewards/testutils"
+	"github.com/milkyway-labs/milkyway/v13/x/rewards/types"
 )
 
 func Test_MigratePlan(t *testing.T) {

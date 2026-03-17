@@ -12,17 +12,17 @@ import (
 	oraclekeeper "github.com/skip-mev/connect/v2/x/oracle/keeper"
 	oracletypes "github.com/skip-mev/connect/v2/x/oracle/types"
 
-	"github.com/milkyway-labs/milkyway/v12/testutils/storetesting"
-	assetskeeper "github.com/milkyway-labs/milkyway/v12/x/assets/keeper"
-	assetstypes "github.com/milkyway-labs/milkyway/v12/x/assets/types"
-	operatorskeeper "github.com/milkyway-labs/milkyway/v12/x/operators/keeper"
-	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
-	poolskeeper "github.com/milkyway-labs/milkyway/v12/x/pools/keeper"
-	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v12/x/services/keeper"
-	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
+	"github.com/milkyway-labs/milkyway/v13/testutils/storetesting"
+	assetskeeper "github.com/milkyway-labs/milkyway/v13/x/assets/keeper"
+	assetstypes "github.com/milkyway-labs/milkyway/v13/x/assets/types"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v13/x/operators/keeper"
+	operatorstypes "github.com/milkyway-labs/milkyway/v13/x/operators/types"
+	poolskeeper "github.com/milkyway-labs/milkyway/v13/x/pools/keeper"
+	poolstypes "github.com/milkyway-labs/milkyway/v13/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v13/x/services/keeper"
+	servicestypes "github.com/milkyway-labs/milkyway/v13/x/services/types"
 )
 
 type KeeperTestData struct {

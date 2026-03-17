@@ -6,7 +6,7 @@ import (
 
 	"cosmossdk.io/collections"
 
-	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v13/x/liquidvesting/types"
 )
 
 func (k *Keeper) SetParams(ctx context.Context, params types.Params) error {

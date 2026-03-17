@@ -3,7 +3,7 @@ package v2
 import (
 	"context"
 
-	restakingtypes "github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v13/x/restaking/types"
 )
 
 type Keeper interface {

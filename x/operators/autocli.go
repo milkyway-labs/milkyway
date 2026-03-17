@@ -6,8 +6,8 @@ import (
 	autocliv1 "cosmossdk.io/api/cosmos/autocli/v1"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	operatorsv1 "github.com/milkyway-labs/milkyway/v12/api/milkyway/operators/v1"
-	"github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	operatorsv1 "github.com/milkyway-labs/milkyway/v13/api/milkyway/operators/v1"
+	"github.com/milkyway-labs/milkyway/v13/x/operators/types"
 )
 
 // AutoCLIOptions implements the autocli.HasAutoCLIConfig interface.

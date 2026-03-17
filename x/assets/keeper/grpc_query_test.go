@@ -4,8 +4,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
-	"github.com/milkyway-labs/milkyway/v12/x/assets/keeper"
-	"github.com/milkyway-labs/milkyway/v12/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v13/x/assets/keeper"
+	"github.com/milkyway-labs/milkyway/v13/x/assets/types"
 )
 
 func (suite *KeeperTestSuite) TestQuerier_Assets() {

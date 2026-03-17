@@ -1,4 +1,4 @@
-module github.com/milkyway-labs/milkyway/v12
+module github.com/milkyway-labs/milkyway/v13
 
 go 1.23
 
