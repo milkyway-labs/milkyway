@@ -3,8 +3,8 @@ package keeper
 import (
 	"context"
 
-	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
-	restakingtypes "github.com/milkyway-labs/milkyway/v12/x/restaking/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v13/x/pools/types"
+	restakingtypes "github.com/milkyway-labs/milkyway/v13/x/restaking/types"
 )
 
 var (

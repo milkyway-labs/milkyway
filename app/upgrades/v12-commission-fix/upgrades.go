@@ -6,7 +6,7 @@ import (
 	upgradetypes "cosmossdk.io/x/upgrade/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/milkyway-labs/milkyway/v12/app/keepers"
+	"github.com/milkyway-labs/milkyway/v13/app/keepers"
 )
 
 func CreateUpgradeHandler(

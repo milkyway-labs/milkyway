@@ -5,7 +5,7 @@ import (
 
 	"cosmossdk.io/collections"
 
-	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v13/x/services/types"
 )
 
 type ServicesHooks struct {

@@ -9,10 +9,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/milkyway-labs/milkyway/v12/testutils/simtesting"
-	"github.com/milkyway-labs/milkyway/v12/utils"
-	"github.com/milkyway-labs/milkyway/v12/x/operators/keeper"
-	"github.com/milkyway-labs/milkyway/v12/x/operators/types"
+	"github.com/milkyway-labs/milkyway/v13/testutils/simtesting"
+	"github.com/milkyway-labs/milkyway/v13/utils"
+	"github.com/milkyway-labs/milkyway/v13/x/operators/keeper"
+	"github.com/milkyway-labs/milkyway/v13/x/operators/types"
 )
 
 // RandomOperator returns a random operator

@@ -3,7 +3,7 @@ package keeper
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	"github.com/milkyway-labs/milkyway/v13/x/liquidvesting/types"
 )
 
 // CompleteBurnCoins runs the endblocker logic to burn the coins after the

@@ -8,9 +8,9 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
-	"github.com/milkyway-labs/milkyway/v12/testutils/storetesting"
-	"github.com/milkyway-labs/milkyway/v12/x/assets/keeper"
-	"github.com/milkyway-labs/milkyway/v12/x/assets/types"
+	"github.com/milkyway-labs/milkyway/v13/testutils/storetesting"
+	"github.com/milkyway-labs/milkyway/v13/x/assets/keeper"
+	"github.com/milkyway-labs/milkyway/v13/x/assets/types"
 )
 
 type KeeperTestData struct {

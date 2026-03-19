@@ -11,10 +11,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	operatorstypes "github.com/milkyway-labs/milkyway/v12/x/operators/types"
-	poolstypes "github.com/milkyway-labs/milkyway/v12/x/pools/types"
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
-	servicestypes "github.com/milkyway-labs/milkyway/v12/x/services/types"
+	operatorstypes "github.com/milkyway-labs/milkyway/v13/x/operators/types"
+	poolstypes "github.com/milkyway-labs/milkyway/v13/x/pools/types"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/types"
+	servicestypes "github.com/milkyway-labs/milkyway/v13/x/services/types"
 )
 
 type Querier struct {

@@ -18,13 +18,13 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	operatorskeeper "github.com/milkyway-labs/milkyway/v12/x/operators/keeper"
-	poolskeeper "github.com/milkyway-labs/milkyway/v12/x/pools/keeper"
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/client/cli"
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/keeper"
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/simulation"
-	"github.com/milkyway-labs/milkyway/v12/x/restaking/types"
-	serviceskeeper "github.com/milkyway-labs/milkyway/v12/x/services/keeper"
+	operatorskeeper "github.com/milkyway-labs/milkyway/v13/x/operators/keeper"
+	poolskeeper "github.com/milkyway-labs/milkyway/v13/x/pools/keeper"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/client/cli"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/keeper"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/simulation"
+	"github.com/milkyway-labs/milkyway/v13/x/restaking/types"
+	serviceskeeper "github.com/milkyway-labs/milkyway/v13/x/services/keeper"
 )
 
 const (

@@ -3,7 +3,7 @@ package v12commissionfix
 import (
 	storetypes "cosmossdk.io/store/types"
 
-	"github.com/milkyway-labs/milkyway/v12/app/upgrades"
+	"github.com/milkyway-labs/milkyway/v13/app/upgrades"
 )
 
 const UpgradeName = "v12-commission-fix"

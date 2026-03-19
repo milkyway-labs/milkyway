@@ -60,22 +60,23 @@ import (
 	oracleclient "github.com/skip-mev/connect/v2/service/clients/oracle"
 	"github.com/spf13/cast"
 
-	milkywayante "github.com/milkyway-labs/milkyway/v12/ante"
-	milkywayabci "github.com/milkyway-labs/milkyway/v12/app/abci"
-	"github.com/milkyway-labs/milkyway/v12/app/forks"
-	v7 "github.com/milkyway-labs/milkyway/v12/app/forks/v7"
-	v8 "github.com/milkyway-labs/milkyway/v12/app/forks/v8"
-	"github.com/milkyway-labs/milkyway/v12/app/keepers"
-	"github.com/milkyway-labs/milkyway/v12/app/upgrades"
-	v10 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v10"
-	v11 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v11"
-	v11warpfix "github.com/milkyway-labs/milkyway/v12/app/upgrades/v11-warp-fix"
-	v12 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v12"
-	v12commissionfix "github.com/milkyway-labs/milkyway/v12/app/upgrades/v12-commission-fix"
-	v6 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v6"
-	v9 "github.com/milkyway-labs/milkyway/v12/app/upgrades/v9"
-	_ "github.com/milkyway-labs/milkyway/v12/client/docs/statik"
-	liquidvestingtypes "github.com/milkyway-labs/milkyway/v12/x/liquidvesting/types"
+	milkywayante "github.com/milkyway-labs/milkyway/v13/ante"
+	milkywayabci "github.com/milkyway-labs/milkyway/v13/app/abci"
+	"github.com/milkyway-labs/milkyway/v13/app/forks"
+	v7 "github.com/milkyway-labs/milkyway/v13/app/forks/v7"
+	v8 "github.com/milkyway-labs/milkyway/v13/app/forks/v8"
+	"github.com/milkyway-labs/milkyway/v13/app/keepers"
+	"github.com/milkyway-labs/milkyway/v13/app/upgrades"
+	v10 "github.com/milkyway-labs/milkyway/v13/app/upgrades/v10"
+	v11 "github.com/milkyway-labs/milkyway/v13/app/upgrades/v11"
+	v11warpfix "github.com/milkyway-labs/milkyway/v13/app/upgrades/v11-warp-fix"
+	v12 "github.com/milkyway-labs/milkyway/v13/app/upgrades/v12"
+	v12commissionfix "github.com/milkyway-labs/milkyway/v13/app/upgrades/v12-commission-fix"
+	v13 "github.com/milkyway-labs/milkyway/v13/app/upgrades/v13"
+	v6 "github.com/milkyway-labs/milkyway/v13/app/upgrades/v6"
+	v9 "github.com/milkyway-labs/milkyway/v13/app/upgrades/v9"
+	_ "github.com/milkyway-labs/milkyway/v13/client/docs/statik"
+	liquidvestingtypes "github.com/milkyway-labs/milkyway/v13/x/liquidvesting/types"
 )
 
 var (
@@ -95,6 +96,7 @@ var (
 		v11warpfix.Upgrade,
 		v12.Upgrade,
 		v12commissionfix.Upgrade,
+		v13.Upgrade,
 	}
 )
 
