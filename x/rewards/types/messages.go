@@ -100,17 +100,17 @@ func (m *MsgCreateRewardsPlan) GetSigners() []sdk.AccAddress {
 func (m *MsgCreateRewardsPlan) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
 	err := m.PoolsDistribution.UnpackInterfaces(unpacker)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	err = m.OperatorsDistribution.UnpackInterfaces(unpacker)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	err = m.UsersDistribution.UnpackInterfaces(unpacker)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return nil
@@ -200,17 +200,17 @@ func (m *MsgEditRewardsPlan) GetSigners() []sdk.AccAddress {
 func (m *MsgEditRewardsPlan) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
 	err := m.PoolsDistribution.UnpackInterfaces(unpacker)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	err = m.OperatorsDistribution.UnpackInterfaces(unpacker)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	err = m.UsersDistribution.UnpackInterfaces(unpacker)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return nil

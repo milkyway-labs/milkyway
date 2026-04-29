@@ -569,7 +569,7 @@ func (k *Keeper) allocateRewardsToUsers(
 			DelegationsValue: totalDelValues,
 		}, rewards)
 	default:
-		panic("unknown operators distribution type")
+		return errors.Wrapf(sdkerrors.ErrInvalidType, "unknown users distribution type: %T", distrType)
 	}
 }
 
